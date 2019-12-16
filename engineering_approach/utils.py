@@ -37,4 +37,28 @@ def get_engine_angle(observation):
 def get_engine_burn(observation):
     y = observation[1]
     return .6 if y>0 else 4
-    
+
+def draw_col_graphs(observations, 
+                    plot_name = 'latest_plot.png'):
+    col_names = [
+    'x_position',
+    'y_position',
+    'angle',
+    'first_leg_indicator',
+    'second_leg_indicator',
+    'throttle',
+    'engine_gimbal',
+    'x_velocity',
+    'y_velocity',
+    'angular_velocity'
+]   
+    not_draw_cols = ['first_leg_indicator', 'second_leg_indicator']
+    draw_cols = [i for i in col_names if i not in not_draw_cols]
+    draw_df = pd.DataFrame(observations, columns = col_names)[draw_cols]
+    fig, axes = plt.subplots(nrows=2, ncols=4, figsize=[23,10])
+    for i, column in enumerate(draw_cols):
+        sns.lineplot(x = draw_df.index,
+                    y = draw_df[column],
+                    ax=axes[i//4,i%4])
+    plt.tight_layout()
+    plt.savefig(f'engineering_approach/plots/{plot_name}')
