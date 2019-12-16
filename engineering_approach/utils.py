@@ -1,7 +1,12 @@
+import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+def check_folder(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+            
 def get_rcs_action(observation):  # reaction_control_system
     """
     Функция возвращает действие для пшикалки,
@@ -61,4 +66,5 @@ def draw_col_graphs(observations,
                     y = draw_df[column],
                     ax=axes[i//4,i%4])
     plt.tight_layout()
+    check_folder('engineering_approach/plots/')
     plt.savefig(f'engineering_approach/plots/{plot_name}')
