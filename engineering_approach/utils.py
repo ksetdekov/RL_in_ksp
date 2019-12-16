@@ -1,3 +1,7 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 def get_rcs_action(observation):  # reaction_control_system
     """
     Функция возвращает действие для пшикалки,
@@ -26,3 +30,11 @@ def get_rcs_action(observation):  # reaction_control_system
         action = -angle * 10
 
     return action
+
+def get_engine_angle(observation):
+    return observation[-1]*1.5
+
+def get_engine_burn(observation):
+    y = observation[1]
+    return .6 if y>0 else 4
+    
