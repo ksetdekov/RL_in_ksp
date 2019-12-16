@@ -41,7 +41,7 @@ def get_engine_angle(observation):
 
 def get_engine_burn(observation):
     y = observation[1]
-    return .6 if y>0 else 4
+    return .6 if y>.5 else 4
 
 def draw_col_graphs(observations, 
                     plot_name = 'latest_plot.png'):
