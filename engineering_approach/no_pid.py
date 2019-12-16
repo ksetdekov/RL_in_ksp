@@ -4,7 +4,7 @@ import gym.spaces
 import rocket_lander_gym
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils import get_engine_angle, get_engine_burn, get_rcs_action
+from utils import get_engine_angle, get_engine_burn, get_rcs_action, draw_col_graphs
 
 env = gym.make('RocketLander-v0')
 env.reset()
@@ -41,3 +41,4 @@ for i in range(1000):
     
 env.close()
 
+draw_col_graphs(observations)
