@@ -2,10 +2,7 @@ import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-def check_folder(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+from utils import OBSERVATIONS_COL_NAMES
             
 def get_rcs_action(observation):  # reaction_control_system
     """
@@ -45,18 +42,7 @@ def get_engine_burn(observation):
 
 def draw_col_graphs(observations, 
                     plot_name = 'latest_plot.png'):
-    col_names = [
-    'x_position',
-    'y_position',
-    'angle',
-    'first_leg_indicator',
-    'second_leg_indicator',
-    'throttle',
-    'engine_gimbal',
-    'x_velocity',
-    'y_velocity',
-    'angular_velocity'
-]   
+    col_names = OBSERVATIONS_COL_NAMES
     not_draw_cols = ['first_leg_indicator', 'second_leg_indicator']
     draw_cols = [i for i in col_names if i not in not_draw_cols]
     draw_df = pd.DataFrame(observations, columns = col_names)[draw_cols]

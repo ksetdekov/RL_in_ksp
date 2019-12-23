@@ -17,7 +17,7 @@ observation = [0]*10
 angle_speed = 0
 
 for i in range(1000):
-    env.render()
+    # env.render()
     
     rcs_action = get_rcs_action(observation)
     engine_angle = get_engine_angle(observation)
