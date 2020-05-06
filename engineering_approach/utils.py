@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from utils import OBSERVATIONS_COL_NAMES
+from utils_common import OBSERVATIONS_COL_NAMES
             
 def get_rcs_action(observation):  # reaction_control_system
     """
@@ -16,17 +16,17 @@ def get_rcs_action(observation):  # reaction_control_system
 
     if (angle < angle_lim) & (angle > 0):
         if angle_vel > 0:
-            # слева от нуля, вращение влево | отр. пшикалка
+            # слева от нуля, вращение влево | отриц. пшикалка
             action = -angle * angle_vel * 10
         else:
-            # слева от нуля, вращение вправо | пол. пшикалка
+            # слева от нуля, вращение вправо | полож. пшикалка
             action = -angle * angle_vel * 10
     elif (angle > -angle_lim) & (angle < 0):
         if angle_vel > 0:
-            # справа от нуля, вращение влево | отр. пшикалка
+            # справа от нуля, вращение влево | отриц. пшикалка
             action = angle * angle_vel * 10
         else:
-            # справа от нуля, вращение вправо | положительная пшикалка
+            # справа от нуля, вращение вправо | полож. пшикалка
             action = angle * angle_vel * 10
     else:
         action = -angle * 10

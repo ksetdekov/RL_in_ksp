@@ -8,7 +8,7 @@ import gym
 import gym.spaces
 import rocket_lander_gym
 
-from utils import OBSERVATIONS_COL_NAMES, check_folder
+from utils_common import OBSERVATIONS_COL_NAMES, check_folder
 
 def add_episode_res(existing_df, observations, rewards, columns=OBSERVATIONS_COL_NAMES):
     new_obs_df = pd.DataFrame(observations, columns=columns)
@@ -37,7 +37,7 @@ for ep in episodes:
             print("Action Taken  ",action)
             print("Observation   ",observation)
             print("Reward Gained ",reward)
-            print("Info          ",info,end='\n\n')
+            # print("Info          ",info,end='/n/n')
 
         if done:
             print("Simulation done.")
