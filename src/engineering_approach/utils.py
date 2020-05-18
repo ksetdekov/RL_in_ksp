@@ -1,11 +1,7 @@
-import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-def check_folder(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
+from src.utils_common import OBSERVATIONS_COL_NAMES, check_folder
             
 def get_rcs_action(observation):  # reaction_control_system
     """
@@ -19,17 +15,17 @@ def get_rcs_action(observation):  # reaction_control_system
 
     if (angle < angle_lim) & (angle > 0):
         if angle_vel > 0:
-            # слева от нуля, вращение влево | отр. пшикалка
+            # слева от нуля, вращение влево | отриц. пшикалка
             action = -angle * angle_vel * 10
         else:
-            # слева от нуля, вращение вправо | пол. пшикалка
+            # слева от нуля, вращение вправо | полож. пшикалка
             action = -angle * angle_vel * 10
     elif (angle > -angle_lim) & (angle < 0):
         if angle_vel > 0:
-            # справа от нуля, вращение влево | отр. пшикалка
+            # справа от нуля, вращение влево | отриц. пшикалка
             action = angle * angle_vel * 10
         else:
-            # справа от нуля, вращение вправо | положительная пшикалка
+            # справа от нуля, вращение вправо | полож. пшикалка
             action = angle * angle_vel * 10
     else:
         action = -angle * 10
@@ -45,18 +41,7 @@ def get_engine_burn(observation):
 
 def draw_col_graphs(observations, 
                     plot_name = 'latest_plot.png'):
-    col_names = [
-    'x_position',
-    'y_position',
-    'angle',
-    'first_leg_indicator',
-    'second_leg_indicator',
-    'throttle',
-    'engine_gimbal',
-    'x_velocity',
-    'y_velocity',
-    'angular_velocity'
-]   
+    col_names = OBSERVATIONS_COL_NAMES
     not_draw_cols = ['first_leg_indicator', 'second_leg_indicator']
     draw_cols = [i for i in col_names if i not in not_draw_cols]
     draw_df = pd.DataFrame(observations, columns = col_names)[draw_cols]
@@ -66,5 +51,5 @@ def draw_col_graphs(observations,
                     y = draw_df[column],
                     ax=axes[i//4,i%4])
     plt.tight_layout()
-    check_folder('engineering_approach/plots/')
-    plt.savefig(f'engineering_approach/plots/{plot_name}')
+    check_folder('src/engineering_approach/plots/')
+    plt.savefig(f'src/engineering_approach/plots/{plot_name}')

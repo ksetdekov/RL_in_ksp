@@ -1,9 +1,6 @@
 import pandas as pd
-import gym
 import gym.spaces
-import rocket_lander_gym
 
-from engineering_approach.utils import get_rcs_action
 setangle = 0
 pid_params =[100,1,0]
 error_last=0

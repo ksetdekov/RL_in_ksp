@@ -1,5 +1,5 @@
 # project stuff
-engineering_approach/plots/
+src/engineering_approach/plots/
 
 #pycharm files
 .idea/*
