@@ -1,6 +1,7 @@
 # RL_in_ksp
 
-1) Install required packages as described in git repo wiki 
+1) Install requirements:<br />
+`pipenv install`
 
 2) Add project src folder to PYTHONPATH:<br />
 `export PYTHONPATH="${PYTHONPATH}:$(pwd)/src"`

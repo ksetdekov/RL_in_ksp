@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+pandas = "*"
+gym = "*"
+box2d-py = "*"
+rocket-lander-gym = {editable = true,git = "https://github.com/sdsubhajitdas/Rocket_Lander_Gym.git"}
+matplotlib = "*"
+seaborn = "*"
+xgboost = "*"
+scikit-learn = "==0.22.2"
+
+[requires]
+python_version = "3.7"

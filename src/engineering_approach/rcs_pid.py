@@ -1,5 +1,6 @@
 import pandas as pd
 import gym.spaces
+import rocket_lander_gym # нужен для работы среды gym RocketLander-v0
 
 setangle = 0
 pid_params =[100,1,0]
