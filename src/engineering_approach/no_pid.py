@@ -4,7 +4,6 @@ import gym
 import gym.spaces
 import rocket_lander_gym
 import matplotlib.pyplot as plt
-import seaborn as sns
 from src.engineering_approach.utils import get_engine_angle, get_engine_burn, get_rcs_action, draw_col_graphs
 
 env = gym.make('RocketLander-v0')
