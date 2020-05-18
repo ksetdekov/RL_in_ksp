@@ -1,8 +1,7 @@
-import os
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from utils_common import OBSERVATIONS_COL_NAMES
+from src.utils_common import OBSERVATIONS_COL_NAMES, check_folder
             
 def get_rcs_action(observation):  # reaction_control_system
     """
@@ -52,5 +51,5 @@ def draw_col_graphs(observations,
                     y = draw_df[column],
                     ax=axes[i//4,i%4])
     plt.tight_layout()
-    check_folder('engineering_approach/plots/')
-    plt.savefig(f'engineering_approach/plots/{plot_name}')
+    check_folder('src/engineering_approach/plots/')
+    plt.savefig(f'src/engineering_approach/plots/{plot_name}')
