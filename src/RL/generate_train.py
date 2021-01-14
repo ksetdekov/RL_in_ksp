@@ -7,46 +7,56 @@ import rocket_lander_gym # нужен для работы среды gym RocketL
 from src.utils_common import OBSERVATIONS_COL_NAMES
 
 
-def add_episode_res(existing_df, observations, rewards, columns=OBSERVATIONS_COL_NAMES):
+def add_episode_res(existing_df, observations, action, rewards, episode_num, columns=OBSERVATIONS_COL_NAMES):
     new_obs_df = pd.DataFrame(observations, columns=columns)
+    actions_df = pd.DataFrame(action).rename(columns={
+        0: 'engine_angle_action',
+        1: 'burn_action',
+        2: 'rcs_action'
+    })
     new_obs_df = pd.concat([new_obs_df, pd.Series(rewards)], axis=1).rename(columns={0:'rewards'})
-
+    new_obs_df = pd.concat([new_obs_df, actions_df], axis=1)
+    new_obs_df['episode_num'] = episode_num
     return pd.concat([existing_df, new_obs_df])
 
-env = gym.make('RocketLander-v0')
-env.reset()
-episodes = range(100)
-observations = []
-rewards = []
-init_df = pd.DataFrame(None)
+def generate_sessions(episodes_num, save_filename='train_data.csv'):
+    env = gym.make('RocketLander-v0')
+    env.reset()
+    episodes = range(episodes_num)
 
-PRINT_DEBUG_MSG = True
-observation = [0]*10
+    init_df = pd.DataFrame(None)
 
-for ep in episodes:
-    for i in range(1000):
-        action = env.action_space.sample()
-        observation,reward,done,info =env.step(action)
-        observations.append(observation)
-        rewards.append(reward)
+    PRINT_DEBUG_MSG = False
+    observation = [0]*10
 
-        if PRINT_DEBUG_MSG:
-            print("Action Taken  ",action)
-            print("Observation   ",observation)
-            print("Reward Gained ",reward)
-            # print("Info          ",info,end='/n/n')
+    for ep in episodes:
+        observations = []
+        actions = []
+        rewards = []
+        for i in range(10000):
+            action = env.action_space.sample()
+            observation, reward, done, info =env.step(action)
+            observations.append(observation)
+            actions.append(action)
+            rewards.append(reward)
 
-        if done:
-            print("Simulation done.")
-            break
+            if PRINT_DEBUG_MSG:
+                print("Action Taken  ",action)
+                print("Observation   ",observation)
+                print("Reward Gained ",reward)
+#                 print("Info          ",info,end='/n/n')
 
-    init_df = add_episode_res(init_df, observations, rewards)
-    env.close()
+            if done:
+                print(f"Simulation {ep} of {episodes_num} done.")
+                break
 
-save_folder = 'src/RL/outputs/'
-print(os.path.abspath(save_folder))
-check_folder(save_folder)
-
-print(os.path.exists(save_folder))
-save_path = os.path.join(save_folder, 'train_data.csv')
-init_df.to_csv(save_path, index=False)
+        init_df = add_episode_res(init_df, observations, actions, rewards, episode_num=ep)
+        env.close()
+        
+    if save_filename:
+        save_folder = 'src/RL/outputs/'
+        print('Saving observations to', os.path.abspath(save_folder))
+        check_folder(save_folder)
+        save_path = os.path.join(save_folder, 'train_data.csv')
+        init_df.to_csv(save_path, index=False)
+    return init_df
