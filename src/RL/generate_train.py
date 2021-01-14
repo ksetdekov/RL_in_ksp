@@ -21,7 +21,6 @@ def add_episode_res(existing_df, observations, action, rewards, episode_num, col
 
 def generate_sessions(episodes_num, save_filename='train_data.csv'):
     env = gym.make('RocketLander-v0')
-    env.reset()
     episodes = range(episodes_num)
 
     init_df = pd.DataFrame(None)
@@ -30,12 +29,13 @@ def generate_sessions(episodes_num, save_filename='train_data.csv'):
     observation = [0]*10
 
     for ep in episodes:
+        env.reset()
         observations = []
         actions = []
         rewards = []
         for i in range(10000):
             action = env.action_space.sample()
-            observation, reward, done, info =env.step(action)
+            observation, reward, done, info = env.step(action)
             observations.append(observation)
             actions.append(action)
             rewards.append(reward)
