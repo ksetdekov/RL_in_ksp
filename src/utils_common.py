@@ -13,6 +13,15 @@ OBSERVATIONS_COL_NAMES = [
     'angular_velocity'
 ]
 
+ACTIONS_COL_NAMES = [
+    'engine_angle_action',
+    'burn_action',
+    'rcs_action'
+]
+
+REWARDS_COL_NAME = 'rewards'
+DEFAULT_SAVE_FOLDER = 'src/RL/outputs/'
+
 def check_folder(path):
     if not os.path.exists(path):
         os.makedirs(path)
