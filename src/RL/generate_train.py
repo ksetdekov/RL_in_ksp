@@ -27,19 +27,19 @@ def predict_burn_action(observation, engine_angle, rcs_action, train_predict_col
     action = [engine_angle, 0, rcs_action]
     train_df_full = pd.DataFrame(list(observation)+action).T
     train_df_full.columns = OBSERVATIONS_COL_NAMES + ACTIONS_COL_NAMES
-    burn_action = model.predict(train_df_full[predict_cols])
-    if burn_action==0:
-        burn_action+=0.01
+    burn_action = max([0, model.predict(train_df_full[predict_cols])[0]])
     return burn_action
 
-def filter_sessions_by_rewards(train_df, reward_quantile):
-    sum_rewards = train_df.groupby('episode_num')['rewards'].sum()
+def filter_sessions_by_rewards(train_df, reward_quantile, sessions_num_thresh=200):
+    sum_rewards = train_df.groupby('episode_num')['rewards'].sum().sort_values(ascending=False)
+    if sessions_num_thresh:
+        sum_rewards = sum_rewards[:sessions_num_thresh]
     elite_episode_nums = sum_rewards.loc[sum_rewards>=sum_rewards.quantile(reward_quantile)].index.values
     return train_df.loc[train_df['episode_num'].isin(elite_episode_nums), :]
 
-def generate_random_sessions(episodes_num, save_filename='train_data.csv'):
+def generate_random_sessions(starting_episode_num, episodes_num, save_filename='train_data.csv'):
     env = gym.make('RocketLander-v0')
-    episodes = range(episodes_num)
+    episodes = range(starting_episode_num, starting_episode_num+episodes_num)
 
     init_df = pd.DataFrame(None)
 
@@ -79,10 +79,10 @@ def generate_random_sessions(episodes_num, save_filename='train_data.csv'):
         init_df.to_csv(save_path, index=False)
     return init_df
 
-def generate_sessions(episodes_num, save_filename='train_data.csv',
+def generate_sessions(starting_episode_num, episodes_num, save_filename='train_data.csv',
                       train_predict_cols={}):
     env = gym.make('RocketLander-v0')
-    episodes = range(episodes_num)
+    episodes = range(starting_episode_num, starting_episode_num+episodes_num)
 
     init_df = pd.DataFrame(None)
 
@@ -98,7 +98,7 @@ def generate_sessions(episodes_num, save_filename='train_data.csv',
             if train_predict_cols:
                 rcs_action = get_rcs_action(observation)
                 engine_angle = get_engine_angle(observation)
-                burn_action = predict_burn_action(observation, engine_angle, rcs_action, train_predict_cols)[0]
+                burn_action = predict_burn_action(observation, engine_angle, rcs_action, train_predict_cols)
                 action = [engine_angle, burn_action, rcs_action]
             else:
                 action = env.action_space.sample()
